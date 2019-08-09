@@ -181,12 +181,15 @@ const sortFilterTemplate = () => {
 const loadMoreBtnTemplate = () => {
   return `<button class="load-more" type="button">load more</button>`;
 };
-
 const renderComponent = (container, template) => {
   const domContainer = document.querySelector(container);
   domContainer.insertAdjacentHTML(`beforeEnd`, template);
 };
-
+const renderCards = (amoutOfCards) => {
+  for (let i = 0; i < amoutOfCards; i++) {
+    renderComponent(`.board__tasks`, cardTemplate());
+  }
+};
 const showComponent = () => {
   renderComponent(`.main__control`, menuTemplate());
   renderComponent(`.main`, searchTemplate());
@@ -194,9 +197,7 @@ const showComponent = () => {
   renderComponent(`.main`, `<section class="board container"></section>`);
   renderComponent(`.board`, sortFilterTemplate());
   renderComponent(`.board`, `<div class="board__tasks"></div>`);
-  renderComponent(`.board__tasks`, cardTemplate());
-  renderComponent(`.board__tasks`, cardTemplate());
-  renderComponent(`.board__tasks`, cardTemplate());
   renderComponent(`.board`, loadMoreBtnTemplate());
+  renderCards(3);
 };
 showComponent();
