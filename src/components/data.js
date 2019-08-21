@@ -31,7 +31,7 @@ const getRandomTags = (tagsInsert) => {
     tagsInsert[j] = tagsInsert[i];
     tagsInsert[i] = temp;
   }
-  return tagsInsert.slice(0, getRandomNumberInRange(0, 3));
+  return tagsInsert.slice(0, getRandomNumberInRange(MIN_NUM_OF_TASKS, MAX_NUM_OF_TASKS));
 };
 
 export const getTask = () => ({
