@@ -20,16 +20,16 @@ renderComponent(mainNode, getSortFilters(CARDS.slice(0, MAX_RENDER_CARDS)));
 const loadMoreButton = mainNode.querySelector(`.load-more`);
 const cardsBoardElement = mainNode.querySelector(`.board__tasks`);
 
-let CARDS_ON_PAGE = MAX_RENDER_CARDS;
-let LEFT_CARDS_TO_RENDER = CARDS.length - CARDS_ON_PAGE;
+let cardsOnPage = MAX_RENDER_CARDS;
+let leftCardToRender = CARDS.length - cardsOnPage;
 
 const renderLeftCards = () => {
-  renderComponent(cardsBoardElement, getFiltersCards(CARDS.slice(CARDS_ON_PAGE, (CARDS_ON_PAGE + MAX_RENDER_CARDS))));
+  renderComponent(cardsBoardElement, getFiltersCards(CARDS.slice(cardsOnPage, (cardsOnPage + MAX_RENDER_CARDS))));
 
-  CARDS_ON_PAGE = CARDS_ON_PAGE + MAX_RENDER_CARDS;
-  LEFT_CARDS_TO_RENDER = CARDS.length - CARDS_ON_PAGE;
+  cardsOnPage += MAX_RENDER_CARDS;
+  leftCardToRender = CARDS.length - cardsOnPage;
 
-  if (LEFT_CARDS_TO_RENDER <= 0) {
+  if (leftCardToRender <= 0) {
     loadMoreButton.classList.add(`visually-hidden`);
     loadMoreButton.removeEventListener(`click`, onLoadMoreButtonClick);
   }

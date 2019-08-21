@@ -22,12 +22,16 @@ const colors = [
   `blue`,
   `green`,
   `pink`];
-const getRandomTags = (tagsInsert, count) => {
-  const resultArray = [];
-  for (let i = 0; i < count; i++) {
-    resultArray.push(getRandomItemFrom(tagsInsert));
+const getRandomTags = (tagsInsert) => {
+  let j;
+  let temp;
+  for (let i = tagsInsert.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    temp = tagsInsert[j];
+    tagsInsert[j] = tagsInsert[i];
+    tagsInsert[i] = temp;
   }
-  return resultArray;
+  return tagsInsert.slice(0, getRandomNumberInRange(0, 3));
 };
 
 export const getTask = () => ({
@@ -42,7 +46,7 @@ export const getTask = () => ({
     'sa': getRandomBoolean(),
     'su': getRandomBoolean(),
   },
-  tags: new Set(getRandomTags(tags, getRandomNumberInRange(MIN_NUM_OF_TASKS, MAX_NUM_OF_TASKS))),
+  tags: new Set(getRandomTags(tags)),
   color: getRandomItemFrom(colors),
   isFavorite: getRandomBoolean(),
   isArchive: getRandomBoolean()
