@@ -1,27 +1,42 @@
-import {createMenuTemplate} from './../src/components/site-menu.js';
-import {createSearchTemplate} from './../src/components/search.js';
-import {createFilterTemplate} from './../src/components/filter.js';
-import {createSortFilterTemplate} from './../src/components/sort-filter.js';
-import {createLoadMoreBtnTemplate} from './../src/components/load-more.js';
-import {createCardTemplate} from './../src/components/card.js';
+import {createMenuTemplate} from './components/site-menu';
+import {createSearchTemplate} from './components/search';
+import {getFilters} from './components/filter';
+import {getSortFilters, getFiltersCards} from './components/sort-filter';
+import {renderComponent} from "./components/utils";
+import {getCards, getFiltersNum} from "./components/data";
 
-const renderComponent = (container, template) => {
-  const domContainer = document.querySelector(container);
-  domContainer.insertAdjacentHTML(`beforeEnd`, template);
-};
-const renderCards = (amoutOfCards) => {
-  for (let i = 0; i < amoutOfCards; i++) {
-    renderComponent(`.board__tasks`, createCardTemplate());
+const TASK_NUM = 30;
+const MAX_RENDER_CARDS = 8;
+const CARDS = getCards(TASK_NUM);
+
+const mainControlElement = document.querySelector(`.main__control`);
+const mainNode = document.querySelector(`.main`);
+
+renderComponent(mainControlElement, createMenuTemplate());
+renderComponent(mainNode, createSearchTemplate());
+renderComponent(mainNode, getFilters(getFiltersNum(CARDS)));
+renderComponent(mainNode, getSortFilters(CARDS.slice(0, MAX_RENDER_CARDS)));
+
+const loadMoreButton = mainNode.querySelector(`.load-more`);
+const cardsBoardElement = mainNode.querySelector(`.board__tasks`);
+
+let cardsOnPage = MAX_RENDER_CARDS;
+let leftCardToRender = CARDS.length - cardsOnPage;
+
+const renderLeftCards = () => {
+  renderComponent(cardsBoardElement, getFiltersCards(CARDS.slice(cardsOnPage, (cardsOnPage + MAX_RENDER_CARDS))));
+
+  cardsOnPage += MAX_RENDER_CARDS;
+  leftCardToRender = CARDS.length - cardsOnPage;
+
+  if (leftCardToRender <= 0) {
+    loadMoreButton.classList.add(`visually-hidden`);
+    loadMoreButton.removeEventListener(`click`, onLoadMoreButtonClick);
   }
 };
-const showComponent = () => {
-  renderComponent(`.main__control`, createMenuTemplate());
-  renderComponent(`.main`, createSearchTemplate());
-  renderComponent(`.main`, createFilterTemplate());
-  renderComponent(`.main`, `<section class="board container"></section>`);
-  renderComponent(`.board`, createSortFilterTemplate());
-  renderComponent(`.board`, `<div class="board__tasks"></div>`);
-  renderComponent(`.board`, createLoadMoreBtnTemplate());
-  renderCards(3);
+const onLoadMoreButtonClick = () => {
+  renderLeftCards();
 };
-showComponent();
+
+loadMoreButton.addEventListener(`click`, onLoadMoreButtonClick);
+
